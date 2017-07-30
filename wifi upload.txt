@@ -1,0 +1,76 @@
+What is our target?
+    Two android devices connected to the same WIFI access point,
+    and can automatically detect each other,
+    and transfer files to each oter.
+
+What do we need?
+    HTTP lib
+        
+
+Choices
+    *HTTP* / FTP
+        familiarity
+        no significant pros for FTP
+    *Android Service* / threaded
+        clearly decoupled
+        kindle / migu can all access uploaded file
+
+nanohttpd
+    https://github.com/NanoHttpd/nanohttpd
+
+==================================================
+https://developer.android.com/guide/components/services.html
+says:
+> If your service is going to perform any CPU-intensive work or blocking operations, such as MP3 playback or networking, you should create a new thread within the service to complete that work.
+
+So, for simplicity, directly open a new thread in MainActivity for now
+
+2017-07-29 10:57:51
+. start a thread, print TID in main thread and started thread
+) start nanohttpd on 2nd thread, verify by browser visiting
+
+https://developer.android.com/training/multiple-threads/define-runnable.html
+android.os.Process.setThreadPriority(THREAD_PRIORITY_BACKGROUND)
+
+https://stackoverflow.com/questions/19152721/android-nanohttpd-issue
+ui thread post
+
+https://github.com/Jhuster/Android/blob/master/VideoServer/src/com/jhuster/videoserver/MainActivity.java
+get local ip address
+
+nanohttpd defaults to one new thread per request
+so just
+
+    server.start()
+
+in onCreate() is sufficient
+
+2017-07-29 21:08:25
+nanohttpd HTTPSession()
+    getHostname()
+slow reason?
+
+. recv udp broadcast from another phone
+
+2017-07-30 08:42:05
+. recv/send udp broadcast from pc
+
+udp broadcast address = ip | ~netmask
+
+. peers list
+. http post to android
+
+. nanohttpd slow response
+    reason: stream.read when GET
+
+2017-07-30 17:07:42
+. write file to SDcard
+
+2017-07-30 20:22:40
+. GET upload
+
+) onActivitiResult no file selected
+) content-length => long (not int)
+) spaces in file names
+) can't choose files on CoolPad phone
+) detect wifi change
